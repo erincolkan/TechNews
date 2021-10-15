@@ -11,46 +11,67 @@ class CardView: GenericBaseView<GenericDataProtocol> {
     private lazy var shadowContainerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
+        
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 2)
         view.layer.shadowRadius = 4
         view.layer.shadowOpacity = 0.4
         view.layer.cornerRadius = 6
-        return view
-    }()
-    
-    private lazy var containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 6
-        view.clipsToBounds = true
-        view.backgroundColor = ColorHelper.backgroundColor.value
+        
         return view
     }()
     
     private lazy var mainStackView: UIStackView = {
-        let temp = UIStackView(arrangedSubviews: [imageContainer])
+        let temp = UIStackView(arrangedSubviews: [imageContainer, newsBodyComponent])
         temp.translatesAutoresizingMaskIntoConstraints = false
+        
         temp.isUserInteractionEnabled = true
         temp.alignment = .fill
         temp.distribution = .fill
         temp.axis = .vertical
         temp.spacing = 5
+        
         return temp
     }()
+    
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.layer.cornerRadius = 6
+        view.clipsToBounds = true
+        view.backgroundColor = ColorHelper.backgroundColor.value
+        
+        return view
+    }()
+    
     
     private lazy var imageContainer: CustomImageViewComponentContainer = {
         let temp = CustomImageViewComponentContainer()
         temp.translatesAutoresizingMaskIntoConstraints = false
+        
         temp.layer.cornerRadius = 2
         temp.clipsToBounds = true
+        
         return temp
     }()
     
+    private lazy var newsBodyComponent: NewsBodyComponent = {
+        let temp = NewsBodyComponent()
+        temp.translatesAutoresizingMaskIntoConstraints = false
+        
+        return temp
+    }()
     
+    override func loadDataView() {
+        super.loadDataView()
+        guard let data = returnData() as? CardViewData else { return }
+        newsBodyComponent.setData(by: data.newsBodyData)
+        imageContainer.setData(by: data.imageData)
+    }
     
-    override func addMajorFields() {
-        super.addMajorFields()
+    override func addMajorViewComponents() {
+        super.addMajorViewComponents()
         addComponents()
     }
     
@@ -75,17 +96,7 @@ class CardView: GenericBaseView<GenericDataProtocol> {
             mainStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-        
+
         ])
     }
-
-    override func loadDataToView() {
-        super.loadDataToView()
-        
-        guard let data = returnData() as? ContentDisplayerViewData else { return }
-        imageContainer.setData(data: data.imageData)
-        infoView.text = data.name
-        infoView.isHidden = data.isInfoViewHidden
-    }
-    
 }

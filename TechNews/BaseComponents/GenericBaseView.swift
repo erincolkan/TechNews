@@ -12,13 +12,17 @@ class GenericBaseView<T>: BaseView {
     
     private var data: T?
     
-    init(frame: CGRect = .zero, data: T? = nil) {
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    public init(frame: CGRect = .zero, data: T? = nil) {
         self.data = data
         super.init(frame: frame)
         loadDataView()
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
     

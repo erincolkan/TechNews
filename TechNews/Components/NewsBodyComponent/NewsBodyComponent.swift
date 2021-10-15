@@ -10,7 +10,7 @@ import UIKit
 
 class NewsBodyComponent: GenericBaseView<NewsBodyComponentData> {
     private lazy var mainStackView: UIStackView = {
-        let temp = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, sourceNameLabel, ])
+        let temp = UIStackView(arrangedSubviews: [titleLabel, descriptionLabel, sourceNameLabel, dateLabel])
         temp.translatesAutoresizingMaskIntoConstraints = false
         
         temp.alignment = .center
@@ -90,15 +90,18 @@ class NewsBodyComponent: GenericBaseView<NewsBodyComponentData> {
         addSubview(mainStackView)
         
         NSLayoutConstraint.activate([
-        
-        
+            mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
+            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
         ])
     }
     
     override func loadDataView() {
         guard let data = returnData() else { return }
-        
+        titleLabel.text = data.titleData
+        descriptionLabel.text = data.descriptionData
+        sourceNameLabel.text = data.sourceNameData
+        dateLabel.text = data.dateData
     }
-    
-    
 }

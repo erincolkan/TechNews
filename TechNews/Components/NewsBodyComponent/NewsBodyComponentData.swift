@@ -11,12 +11,13 @@ class NewsBodyComponentData {
     private(set) var titleData: String
     private(set) var descriptionData: String
     private(set) var sourceNameData: String
-    private(set) var dateData: Date
+    private(set) var dateData: String
     
     init(titleData: String, descriptionData: String, sourceNameData: String,
          dateData: String) {
-        self.titleData =
+        self.titleData = titleData
+        self.descriptionData = descriptionData
+        self.sourceNameData = sourceNameData
+        self.dateData = dateData
     }
-    
-    
 }
