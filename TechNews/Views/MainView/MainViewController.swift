@@ -9,10 +9,13 @@ import UIKit
 
 class MainViewController : BaseViewController<MainViewModel> {
     private var newsCollectionView: ItemCollectionComponent!
-    
+        
     override func prepareViewControllerConfigurations() {
         super.prepareViewControllerConfigurations()
         
+        subscribeViewModelListeners()
+        addNewsComponent()
+        viewModel.getNews()
     }
     
     private func addNewsComponent() {
@@ -27,6 +30,21 @@ class MainViewController : BaseViewController<MainViewModel> {
             newsCollectionView.topAnchor.constraint(equalTo: view.topAnchor),
             newsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func subscribeViewModelListeners() {
+        viewModel.subscribeState { [weak self] state in
+            switch state {
+            case .success:
+                print("data is ready")
+                self?.newsCollectionView.reloadCollectionComponent()
+            case .loading:
+                print("data is getting")
+            case .failure:
+                print("errror")
+                // show alert popup
+            }
+        }
     }
 }
 

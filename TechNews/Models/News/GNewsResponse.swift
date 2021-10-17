@@ -9,15 +9,6 @@ import Foundation
 
 // MARK: - GNewsResponse
 struct GNewsResponse: Codable {
-    let data: GNewsResponseBody
-    
-    init(data: GNewsResponseBody) {
-        self.data = data
-    }
-}
-
-// MARK: - GNewsResponseBody
-struct GNewsResponseBody: Codable {
     let totalArticles: Int
     let articles: [Article]
 }
@@ -27,7 +18,7 @@ struct Article: Codable {
     let title, articleDescription, content: String
     let url: String
     let image: String
-    let publishedAt: Date
+    let publishedAt: String
     let source: Source
 
     enum CodingKeys: String, CodingKey {

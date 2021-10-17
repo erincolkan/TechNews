@@ -19,7 +19,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         self.window = UIWindow(windowScene: windowScene)
+        let mainView = MainViewBuilder.build()
+        let navigationController = UINavigationController(rootViewController: mainView)
         
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        navigationController.navigationBar.prefersLargeTitles = true
+        navigationController.navigationBar.standardAppearance = appearance;
+        navigationController.navigationBar.scrollEdgeAppearance = navigationController.navigationBar.standardAppearance
+        
+        window?.rootViewController = navigationController
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -16,5 +16,7 @@ enum TabBarImages: String, GenericValueProtocol {
     }
     
     case apple = "apple"
+    case appleSelected = "appleSelected"
     case tech = "tech"
+    case techSelected = "techSelected"
 }

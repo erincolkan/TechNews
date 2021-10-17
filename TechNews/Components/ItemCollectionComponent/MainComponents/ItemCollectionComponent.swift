@@ -66,7 +66,6 @@ class ItemCollectionComponent: GenericBaseView<ItemCollectionViewData> {
     func addPullToRefresh() {
         guard let data = returnData(), data.isRefreshingSupported else { return }
         collectionView.refreshControl = pullToRefresh
-        
     }
     
     func setupDelegation(with delegate: ItemCollectionComponentDelegate) {
@@ -80,10 +79,6 @@ class ItemCollectionComponent: GenericBaseView<ItemCollectionViewData> {
         }
     }
     
-    func isLoadingCell(for indexPath: IndexPath) -> Bool {
-        return delegate?.isLoadingCell(for: indexPath.row) ?? false
-    }
-    
     func removeItem(at indexPath: IndexPath, completion: @escaping (Bool) -> Void) {
         collectionView.performBatchUpdates({ [weak self] in
             self?.collectionView.deleteItems(at: [indexPath])
@@ -92,7 +87,7 @@ class ItemCollectionComponent: GenericBaseView<ItemCollectionViewData> {
     
     func reloadItem(at indexPath: IndexPath) {
         collectionView.performBatchUpdates { [weak self] in
-            //self?.collectionView.reloadItems(at: [indexPath])
+            self?.collectionView.reloadItems(at: [indexPath])
             self?.collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
     }
@@ -116,15 +111,10 @@ extension ItemCollectionComponent: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        if isLoadingCell(for: indexPath) {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoadingCellView.identifier, for: indexPath) as? LoadingCellView else { fatalError() }
-            return cell
-        } else {
-            guard let data = delegate?.getData(at: indexPath.row) else { fatalError() }
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentDisplayerCollectionViewCell.identifier, for: indexPath) as? ContentDisplayerCollectionViewCell else { fatalError() }
-            cell.setRowData(data: data)
-            return cell
-        }
+        guard let data = delegate?.getData(at: indexPath.row) else { fatalError() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContentDisplayerCollectionViewCell.identifier, for: indexPath) as? ContentDisplayerCollectionViewCell else { fatalError() }
+        cell.setRowData(data: data)
+        return cell
         
     }
     
@@ -138,9 +128,7 @@ extension ItemCollectionComponent: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if isLoadingCell(for: indexPath) {
-            delegate?.getMoreData()
-        }
+        
     }
     
 }
@@ -149,8 +137,9 @@ extension ItemCollectionComponent: UICollectionViewDelegate, UICollectionViewDat
 extension ItemCollectionComponent: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (UIScreen.main.bounds.width - 50) / 3
-        return CGSize(width: width, height: 250)
+        let width = UIScreen.main.bounds.width - 20
+        let height = UIScreen.main.bounds.height / 3
+        return CGSize(width: width, height: height)
     }
     
 }
